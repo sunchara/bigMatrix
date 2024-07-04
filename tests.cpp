@@ -26,10 +26,9 @@ struct BigSquareMatrix<BLOCK_SIZE> getIdentityMatrix(size_t n, size_t m)
 
 int main()
 {
-    auto M;
     try
     {
-        M = getToeplizMatrix<512>(1000, 900)* getToeplizMatrix<512>(900, 1000);
+        std::cout << getToeplizMatrix<512>(10, 9) * getToeplizMatrix<512>(9, 10);
     }
     catch (...)
     {
