@@ -74,7 +74,7 @@ struct SimpleBlockMatrix
     double infNorm() const
     {
         return std::abs (*std::max_element(
-            elements.begin(), elements.end(), [](double rhs, double lhs) { return std::abs(a) < std::abs(b); }));
+            elements.begin(), elements.end(), [](double rhs, double lhs) { return std::abs(rhs) < std::abs(lhs); }));
     }
 
     bool isZero()
@@ -89,8 +89,10 @@ bool equalsByEps(const struct SimpleBlockMatrix<BLOCK_SIZE>& lhs, const struct S
 {
     for (size_t ind = 0; ind < BLOCK_SIZE * BLOCK_SIZE; ++ind)
     {
-        double differenceAbs = std:abs(lhs.elements[ind] - rhs.elements[ind]);
-        double minAbs = std::min(std:abs(lhs.elements[ind], std:abs(lhs.elements[ind])));
+        double differenceAbs = std::abs(
+            lhs.elements[ind] - rhs.elements[ind]);
+
+        double minAbs = std::min(std::abs(lhs.elements[ind], std::abs(lhs.elements[ind])));
 
         if (differenceAbs > std::numeric_limits<double>::epsilon * minAbs)
             return false;
