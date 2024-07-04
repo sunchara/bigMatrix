@@ -6,6 +6,8 @@
 #include <vector>
 #include <optional>
 #include <iomanip>
+#include <algorithm>
+
 template<size_t BLOCK_SIZE = 512>
 struct SimpleBlockMatrix
 {
@@ -63,7 +65,38 @@ struct SimpleBlockMatrix
 
         return dest;
     }
+
+    bool operator==(const struct SimpleBlockMatrix<BLOCK_SIZE>& rhs) const
+    {
+        return elements == rhs.elements;
+    }
+
+    double infNorm() const
+    {
+        return std::abs (*std::max_element(
+            elements.begin(), elements.end(), [](double rhs, double lhs) { return std::abs(a) < std::abs(b); }));
+    }
+
+    bool isZero()
+    {
+        return std::all_of(elements.begin(), elements.end(),
+            [](double x) { return std::abs(x) < std::numeric_limits<double>::epsilon; });
+    }
 };
+
+template<size_t BLOCK_SIZE = 512>
+bool equalsByEps(const struct SimpleBlockMatrix<BLOCK_SIZE>& lhs, const struct SimpleBlockMatrix<BLOCK_SIZE>& rhs)
+{
+    for (size_t ind = 0; ind < BLOCK_SIZE * BLOCK_SIZE; ++ind)
+    {
+        double differenceAbs = std:abs(lhs.elements[ind] - rhs.elements[ind]);
+        double minAbs = std::min(std:abs(lhs.elements[ind], std:abs(lhs.elements[ind])));
+
+        if (differenceAbs > std::numeric_limits<double>::epsilon * minAbs)
+            return false;
+    }
+    return true;
+}
 
 template<size_t BLOCK_SIZE = 512>
 struct BigSquareMatrix
